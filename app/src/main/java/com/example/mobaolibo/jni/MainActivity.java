@@ -1,11 +1,30 @@
 package com.example.mobaolibo.jni;
 
+import android.os.AsyncTask;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.mobaolibo.jni.bsdiff.PatchUtils;
+import com.example.mobaolibo.jni.utils.ApkUtils;
 
 public class MainActivity extends AppCompatActivity {
+    private ProgressBar loading;
+    private String srcDir = "";
+    private String destDir1 = Environment.getExternalStorageDirectory().toString() + "/JNI/nf.apk";//新版full
+    private String destDir2 = Environment.getExternalStorageDirectory().toString() + "/JNI/nc.apk";//新版合并生成
+    private String patchDir = Environment.getExternalStorageDirectory().toString() + "/JNI/p.patch";//patch
+
+    // 成功
+    private static final int WHAT_SUCCESS = 1;
+    // 失败
+    private static final int WHAT_FAIL_PATCH = 0;
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -20,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
         // Example of a call to a native method
         TextView tv = (TextView) findViewById(R.id.sample_text);
         tv.setText(stringFromJNI());
+        loading = (ProgressBar) findViewById(R.id.loadding);
+        srcDir = ApkUtils.getApkPath(this);
     }
 
     /**
@@ -33,6 +54,69 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickDynamic(View view){
-        AndroidJni.getInstance().dynamicLog();
+//        AndroidJni.getInstance().dynamicLog();
+        loading.setVisibility(View.VISIBLE);
+        new PatchTask().execute();
     }
+
+    public void patch(View view){
+        loading.setVisibility(View.VISIBLE);
+        new PatchTask().execute();
+    }
+
+
+    public class PatchTask extends AsyncTask<String, Void, Integer> {
+        @Override
+        protected Integer doInBackground(String... params) {
+            try {
+
+                int result = PatchUtils.getInstance().patch(srcDir, destDir2, patchDir);
+                if (result == 0) {
+                    handler.obtainMessage(4).sendToTarget();
+                    return WHAT_SUCCESS;
+                } else {
+                    handler.obtainMessage(5).sendToTarget();
+                    return WHAT_FAIL_PATCH;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return WHAT_FAIL_PATCH;
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+            loading.setVisibility(View.GONE);
+        }
+    }
+
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 0:
+                    Toast.makeText(getApplicationContext(), "copy successed", Toast.LENGTH_SHORT).show();
+                    break;
+                case 1:
+                    Toast.makeText(getApplicationContext(), "copy failured", Toast.LENGTH_SHORT).show();
+                    break;
+                case 2:
+                    Toast.makeText(getApplicationContext(), "bsdiff successed", Toast.LENGTH_SHORT).show();
+                    break;
+                case 3:
+                    Toast.makeText(getApplicationContext(), "bsdiff failured", Toast.LENGTH_SHORT).show();
+                    break;
+                case 4:
+                    Toast.makeText(getApplicationContext(), "patch successed", Toast.LENGTH_SHORT).show();
+                    break;
+                case 5:
+                    Toast.makeText(getApplicationContext(), "patch failures", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 }

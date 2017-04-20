@@ -25,6 +25,23 @@ add_library(
             src/main/cpp/JniMain.cpp
             src/main/cpp/JniLog.h)
 
+add_library(
+            ApkDiff
+            SHARED
+            src/main/cpp/diff/bzip2/bzlib.h
+            src/main/cpp/diff/bzip2/bzlib_private.h
+            src/main/cpp/diff/bzip2/bzlib.c
+            src/main/cpp/diff/bzip2/bzip2.c
+            src/main/cpp/diff/bzip2/bzip2recover.c
+            src/main/cpp/diff/bzip2/blocksort.c
+            src/main/cpp/diff/bzip2/compress.c
+            src/main/cpp/diff/bzip2/crctable.c
+            src/main/cpp/diff/bzip2/decompress.c
+            src/main/cpp/diff/bzip2/huffman.c
+            src/main/cpp/diff/bzip2/randtable.c
+            src/main/cpp/diff/com_example_mobaolibo_jni_bsdiff_DiffUtils.h
+            src/main/cpp/diff/com_example_mobaolibo_jni_bsdiff_DiffUtils.c)
+
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
 # default, you only need to specify the name of the public NDK library

@@ -29,4 +29,25 @@
         android:text="dynamic log"
         android:onClick="onClickDynamic"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="patch"
+        android:onClick="onClickDynamic"/>
+
+    <ProgressBar
+        android:id="@+id/loadding"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
+        android:onClick="patch"/>
+
 </android.support.constraint.ConstraintLayout>

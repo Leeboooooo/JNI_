@@ -6,7 +6,6 @@ JNIEXPORT jstring JNICALL
 Java_com_example_mobaolibo_jni_MainActivity_stringFromJNI(
         JNIEnv *env,
         jobject /* this */) {
-    std::string hello = "Hello from C++";
-    hello.append("-- Catch me!");
+    std::string hello = "Just new version";
     return env->NewStringUTF(hello.c_str());
 }
