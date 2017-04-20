@@ -16,7 +16,7 @@ public class AndroidJni {
 
     static{
         try {
-            System.loadLibrary("native-lib");
+            System.loadLibrary("vxg-lib");
         }catch (Exception e){
             e.printStackTrace();
         }
