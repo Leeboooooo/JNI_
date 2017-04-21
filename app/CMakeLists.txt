@@ -39,8 +39,8 @@ add_library(
             src/main/cpp/diff/bzip2/decompress.c
             src/main/cpp/diff/bzip2/huffman.c
             src/main/cpp/diff/bzip2/randtable.c
-            src/main/cpp/diff/com_example_mobaolibo_jni_bsdiff_DiffUtils.h
-            src/main/cpp/diff/com_example_mobaolibo_jni_bsdiff_DiffUtils.c)
+            src/main/cpp/diff/com_mobao_utils_iupgrade_PatchUtils.h
+            src/main/cpp/diff/com_mobao_utils_iupgrade_PatchUtils.c)
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
