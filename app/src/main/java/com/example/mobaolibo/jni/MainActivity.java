@@ -17,9 +17,8 @@ import com.example.mobaolibo.jni.utils.ApkUtils;
 public class MainActivity extends AppCompatActivity {
     private ProgressBar loading;
     private String srcDir = "";
-    private String destDir1 = Environment.getExternalStorageDirectory().toString() + "/JNI/nf.apk";//新版full
-    private String destDir2 = Environment.getExternalStorageDirectory().toString() + "/JNI/nc.apk";//新版合并生成
-    private String patchDir = Environment.getExternalStorageDirectory().toString() + "/JNI/p.patch";//patch
+    private String newDir = "";
+    private String patchDir = "";
 
     // 成功
     private static final int WHAT_SUCCESS = 1;
@@ -41,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         tv.setText(stringFromJNI());
         loading = (ProgressBar) findViewById(R.id.loadding);
         srcDir = ApkUtils.getApkPath(this);
+        newDir = ApkUtils.getNewApkPath();
+        patchDir = ApkUtils.getPatch();
     }
 
     /**
@@ -70,12 +71,12 @@ public class MainActivity extends AppCompatActivity {
         protected Integer doInBackground(String... params) {
             try {
 
-                int result = PatchUtils.getInstance().patch(srcDir, destDir2, patchDir);
+                int result = PatchUtils.getInstance().patch(srcDir, newDir, patchDir);
                 if (result == 0) {
-                    handler.obtainMessage(4).sendToTarget();
+                    handler.obtainMessage(1).sendToTarget();
                     return WHAT_SUCCESS;
                 } else {
-                    handler.obtainMessage(5).sendToTarget();
+                    handler.obtainMessage(2).sendToTarget();
                     return WHAT_FAIL_PATCH;
                 }
             } catch (Exception e) {
@@ -97,22 +98,16 @@ public class MainActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0:
-                    Toast.makeText(getApplicationContext(), "copy successed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "failures", Toast.LENGTH_SHORT).show();
+                    //do anything
                     break;
                 case 1:
-                    Toast.makeText(getApplicationContext(), "copy failured", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "patch successed", Toast.LENGTH_SHORT).show();
+                    //do anything
                     break;
                 case 2:
-                    Toast.makeText(getApplicationContext(), "bsdiff successed", Toast.LENGTH_SHORT).show();
-                    break;
-                case 3:
-                    Toast.makeText(getApplicationContext(), "bsdiff failured", Toast.LENGTH_SHORT).show();
-                    break;
-                case 4:
-                    Toast.makeText(getApplicationContext(), "patch successed", Toast.LENGTH_SHORT).show();
-                    break;
-                case 5:
                     Toast.makeText(getApplicationContext(), "patch failures", Toast.LENGTH_SHORT).show();
+                    //do anything
                     break;
                 default:
                     break;

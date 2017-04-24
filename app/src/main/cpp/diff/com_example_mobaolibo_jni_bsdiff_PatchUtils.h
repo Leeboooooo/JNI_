@@ -9,7 +9,7 @@ extern "C" {
 #endif
 
 JNIEXPORT jint JNICALL
-Java_com_mobao_utils_iupgrade_PatchUtils_patch
+Java_com_example_mobaolibo_jni_bsdiff_PatchUtils_patch
         (JNIEnv *, jclass, jstring, jstring, jstring);
 }
 
